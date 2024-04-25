@@ -3,6 +3,7 @@ package com.demo.bookstore.controller;
 import com.demo.bookstore.dto.BookDTO;
 import com.demo.bookstore.service.BookService;
 
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -28,37 +29,17 @@ public class BookController extends HttpServlet {
     };
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String action = request.getParameter("action") != null ? request.getParameter("action") : "none";
         try {
-            switch (action) {
-                /*case "new":
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("newProductForm.jsp");
-                    dispatcher.forward(request, response);
-                    break;
-                case "insert":
-                    String name = request.getParameter("name");
-                    String des = request.getParameter("description");
-                    float price = Float.parseFloat(request.getParameter("price"));
+            List<BookDTO> listBook = this.bookService.getAllBooks();
 
-                    BookDTO newBook = new BookDTO(name, des, price);
-                    this.productService.addNewProduct(newProduct);
-                    response.sendRedirect("product");
-                    break;
-                case "delete":
-                    break;
-                case "edit":
-                    this.showEditForm(request, response);
-                    break;
-                case "update":
-                    this.updateProduct(request, response);
-                    break;*/
-                default:
-                    this.getListBook(request, response);
-                    break;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            request.setAttribute("listBook", listBook);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.forward(request, response);
         }
+        catch (SQLException e){
+            e.printStackTrace();
+        };
+
     }
 
     /**
@@ -70,6 +51,7 @@ public class BookController extends HttpServlet {
 
     private void getListBook(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
         List<BookDTO> listBook = this.bookService.getAllBooks();
+
         request.setAttribute("listBook", listBook);
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
@@ -95,3 +77,4 @@ public class BookController extends HttpServlet {
         response.sendRedirect("product");
     }*/
 }
+

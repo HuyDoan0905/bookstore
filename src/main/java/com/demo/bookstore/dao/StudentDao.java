@@ -1,5 +1,7 @@
 package com.demo.bookstore.dao;
 
+import com.demo.bookstore.dto.StudentDTO;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.demo.bookstore.dto.StudentDTO;
+
 
 public class StudentDao {
     // Connection object to interact with the database
