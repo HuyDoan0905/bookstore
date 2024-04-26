@@ -2,6 +2,7 @@ package com.demo.bookstore.dao;
 
 
 
+import com.demo.bookstore.common.ConnectDB;
 import com.demo.bookstore.dto.BookDTO;
 
 import java.sql.Connection;
@@ -27,8 +28,6 @@ public class BookDao {
     private String jdbcPassword;
     private Connection jdbcConnection;
 
-
-
     public BookDao(String jdbcURL, String jdbcUsername, String jdbcPassword) {
         super();
         this.jdbcURL = jdbcURL;
@@ -37,15 +36,7 @@ public class BookDao {
     }
 
     protected void connect() throws SQLException {
-        if (jdbcConnection == null || jdbcConnection.isClosed()) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                throw new SQLException(e);
-            }
-            jdbcConnection = DriverManager.getConnection(
-                    jdbcURL, jdbcUsername, jdbcPassword);
-        }
+        jdbcConnection = ConnectDB.getConnection();
     }
 
     protected void disconnect() throws SQLException {
@@ -55,33 +46,28 @@ public class BookDao {
     }
 
     public List<BookDTO> getAllBooks() throws SQLException {
-        List<BookDTO> listBook = new ArrayList<BookDTO>();
-
+        List<BookDTO> listBook = new ArrayList<>();
         String sql = "SELECT * FROM books";
-
         connect();
+             Statement statement = jdbcConnection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql) ;
+            while (resultSet.next()) {
+                int bookid = resultSet.getInt("BookID");
+                String name = resultSet.getString("Name");
+                int totalpage = resultSet.getInt("TotalPage");
+                String type = resultSet.getString("Type");
+                int quantity = resultSet.getInt("Quantity");
+                BookDTO book = new BookDTO(bookid, name, totalpage, type, quantity);
+                listBook.add(book);
+            }
 
-        Statement statement = jdbcConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while (resultSet.next()) {
-            int id = resultSet.getInt("BookID");
-            String name = resultSet.getString("Name");
-            int totalPage = resultSet.getInt("TotalPage");
-            String type = resultSet.getString("Type");
-            int quantity = resultSet.getInt("Quantity");
-            BookDTO book = new BookDTO(id, name, totalPage, type, quantity);
-            listBook.add(book);
+        System.out.println("aaaaa");
+        for (BookDTO book: listBook) {
+            System.out.println(book.getBookID());
         }
-
-        resultSet.close();
-        statement.close();
-
-        disconnect();
-
         return listBook;
-    }
 
+    }
 
     /*@Override
     public boolean addNewProduct(ProductDTO newProduct) throws SQLException {

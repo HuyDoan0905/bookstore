@@ -15,14 +15,14 @@ public class BookController extends HttpServlet {
 
     private BookService bookService;
 
-    public void init() {
+    /*public void init() {
         String jdbcURL = getServletContext().getInitParameter("dbURL");
         String jdbcUsername = getServletContext().getInitParameter("dbUsername");
         String jdbcPassword = getServletContext().getInitParameter("dbPassword");
 
         this.bookService = new BookService(jdbcURL, jdbcUsername, jdbcPassword);
 
-    }
+    }*/
 
     public BookController(){
 
